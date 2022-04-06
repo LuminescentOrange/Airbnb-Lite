@@ -35,5 +35,11 @@ public class CustomExceptionHandler {//service throws UserAlreadyExistException.
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @ExceptionHandler(InvalidSearchDateException.class)
+    public final ResponseEntity<String> handleInvalidSearchDateExceptions(Exception ex, WebRequest request) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+
 
 }
