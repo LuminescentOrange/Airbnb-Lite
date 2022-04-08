@@ -39,3 +39,4 @@ build/
 /mvnw.cmd
 /mvnw
 /src/main/resources/
+/src/test/
