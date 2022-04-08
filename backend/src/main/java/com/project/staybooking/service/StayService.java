@@ -1,5 +1,6 @@
 package com.project.staybooking.service;
 import com.project.staybooking.exception.StayNotExistException;
+import com.project.staybooking.repository.LocationRepository;
 import com.project.staybooking.repository.StayRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,14 +22,16 @@ import java.util.stream.Collectors;
 @Service
 public class StayService {
     private StayRepository stayRepository;
+    private LocationRepository locationRepository;
     private ImageStorageService imageStorageService;
-
+    private GeoCodingService geoCodingService;
 
     @Autowired
-    public StayService(StayRepository stayRepository,  ImageStorageService imageStorageService) {
+    public StayService(StayRepository stayRepository, LocationRepository locationRepository, ImageStorageService imageStorageService, GeoCodingService geoCodingService) {
         this.stayRepository = stayRepository;
+        this.locationRepository = locationRepository;
         this.imageStorageService = imageStorageService;
-
+        this.geoCodingService = geoCodingService;
     }
 
     public List<Stay> listByUser(String username) {
@@ -65,6 +68,9 @@ public class StayService {
         stay.setImages(stayImages);
 
         stayRepository.save(stay);
+
+        Location location = geoCodingService.getLatLng(stay.getId(), stay.getAddress());
+        locationRepository.save(location);
     }
 
 
