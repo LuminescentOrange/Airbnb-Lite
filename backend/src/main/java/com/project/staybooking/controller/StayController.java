@@ -1,6 +1,8 @@
 package com.project.staybooking.controller;
+import com.project.staybooking.model.Reservation;
 import com.project.staybooking.model.Stay;
 import com.project.staybooking.model.User;
+import com.project.staybooking.service.ReservationService;
 import com.project.staybooking.service.StayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,10 +19,13 @@ import java.security.Principal;
 @RestController
 public class StayController {
     private StayService stayService;
+    private ReservationService reservationService;
 
     @Autowired
-    public StayController(StayService stayService) {
+    public StayController(StayService stayService, ReservationService reservationService) {
         this.stayService = stayService;
+        this.reservationService = reservationService;
+
     }
 
 //    @GetMapping(value = "/stays")
@@ -97,6 +102,10 @@ public class StayController {
     @DeleteMapping("/stays/{stayId}")
     public void deleteStay(@PathVariable Long stayId, Principal principal) {
         stayService.delete(stayId, principal.getName());
+    }
+    @GetMapping(value = "/stays/reservations/{stayId}")
+    public List<Reservation> listReservations(@PathVariable Long stayId) {
+        return reservationService.listByStay(stayId);
     }
 
 
